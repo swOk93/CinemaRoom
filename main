@@ -46,15 +46,15 @@ fun buyTicket() {
 }
 
 fun statistics() {
-    println("Number of purchased tickets: 2")
-    println("Percentage: 5.56%")
-    println("Current income: $20")
-    println("Total income: $360")
+    println("Number of purchased tickets: $amountTickets")
+    println("Percentage: ${amountTickets / totalTickets * 100}")
+    println("Current income: $curIncome")
+    println("Total income: $totalIncome")
 }
 
 fun kassa() {
     do {
-        println("1. Show the seats\n2. Buy a ticket\n0. Exit")
+        println("1. Show the seats\n2. Buy a ticket\n3. Statistics Exit")
         var n = readln().toInt()
         if (n == 1) { draw() }
         else if (n == 2) { buyTicket() }
