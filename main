@@ -7,10 +7,11 @@ var amountTickets = 0
 var totalTickets = 0
 var curIncome = 0
 var totalIncome = 0
+var percentage = 0.0
 
 fun draw(){
     println("Cinema:")
-    for (i in 0..room.size-1) {
+    for (i in 0 until room.size) {
         println(room[i].joinToString(" "))
     }
     println()
@@ -21,7 +22,12 @@ fun buyTicket() {
     val rowSpot = readln().toInt()
     println("Enter a seat number in that row:")
     val seatSpot = readln().toInt()
-    if (room[rowSpot][seatSpot] == "B") {
+    if (rowSpot > rows || seatSpot > seats) {
+        print("Wrong input!")
+        buyTicket()
+        return
+    }
+    else if (room[rowSpot][seatSpot] == "B") {
         println("That ticket has already been purchased!")
         buyTicket()
         return
@@ -46,17 +52,19 @@ fun buyTicket() {
 }
 
 fun statistics() {
+    percentage = amountTickets.toDouble() / totalTickets.toDouble() * 100
+    val formatPercentage = "%.2f".format(percentage)
     println("Number of purchased tickets: $amountTickets")
-    println("Percentage: ${amountTickets / totalTickets * 100}")
-    println("Current income: $curIncome")
-    println("Total income: $totalIncome")
+    println("Percentage: $formatPercentage%")
+    println("Current income: $$curIncome")
+    println("Total income: $$totalIncome")
 }
 
 fun kassa() {
     do {
-        println("1. Show the seats\n2. Buy a ticket\n3. Statistics Exit")
-        var n = readln().toInt()
-        if (n == 1) { draw() }
+        println("1. Show the seats\n2. Buy a ticket\n3. Statistics\nExit")
+        val n = readln().toInt()
+        if (n == 1) { draw() }            // need to replace to "when"
         else if (n == 2) { buyTicket() }
         else if (n == 3) { statistics() }
     } while (n != 0)
@@ -69,12 +77,11 @@ fun main() {
     println("Enter the number of seats in each row:")
     seats = readln().toInt()
     for (i in 0..rows) {
-        room.add(mutableListOf<String>())
+        room.add(mutableListOf())
         for (j in 0..seats) {
             if (j == 0) {
-                if (j == 0 && i == 0) room[i].add(" ")
-                else if (j == 0) room[i].add(i.toString())
-                else room[j].add(i.toString())
+                if (i == 0) room[i].add(" ")
+                else room[i].add(i.toString())
             }
             else {
                 if (i == 0) room[i].add(j.toString())
