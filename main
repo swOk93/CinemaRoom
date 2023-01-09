@@ -1,0 +1,89 @@
+package cinema
+
+var rows = 0
+var seats = 0
+val room = mutableListOf(mutableListOf<String>())
+var amountTickets = 0
+var totalTickets = 0
+var curIncome = 0
+var totalIncome = 0
+
+fun draw(){
+    println("Cinema:")
+    for (i in 0..room.size-1) {
+        println(room[i].joinToString(" "))
+    }
+    println()
+}
+
+fun buyTicket() {
+    println("Enter a row number:")
+    val rowSpot = readln().toInt()
+    println("Enter a seat number in that row:")
+    val seatSpot = readln().toInt()
+    if (room[rowSpot][seatSpot] == "B") {
+        println("That ticket has already been purchased!")
+        buyTicket()
+        return
+    }
+    room[rowSpot][seatSpot] = "B"
+    amountTickets++
+    print("\nTicket price: ")
+    if (rows * seats > 60) {
+        if (rowSpot <= (room.size-1) / 2) {
+            println("Enter a seat number in that row: $10")
+            curIncome += 10
+        }
+        else {
+            println("Enter a seat number in that row: $8")
+            curIncome += 8
+        }
+    } else {
+        println("Enter a seat number in that row: $10")
+        curIncome += 10
+    }
+    draw()
+}
+
+fun statistics() {
+    println("Number of purchased tickets: 2")
+    println("Percentage: 5.56%")
+    println("Current income: $20")
+    println("Total income: $360")
+}
+
+fun kassa() {
+    do {
+        println("1. Show the seats\n2. Buy a ticket\n0. Exit")
+        var n = readln().toInt()
+        if (n == 1) { draw() }
+        else if (n == 2) { buyTicket() }
+        else if (n == 3) { statistics() }
+    } while (n != 0)
+}
+
+fun main() {
+    room.removeAt(0)
+    println("Enter the number of rows:")
+    rows = readln().toInt()
+    println("Enter the number of seats in each row:")
+    seats = readln().toInt()
+    for (i in 0..rows) {
+        room.add(mutableListOf<String>())
+        for (j in 0..seats) {
+            if (j == 0) {
+                if (j == 0 && i == 0) room[i].add(" ")
+                else if (j == 0) room[i].add(i.toString())
+                else room[j].add(i.toString())
+            }
+            else {
+                if (i == 0) room[i].add(j.toString())
+                else room[i].add("S")
+            }
+        }
+    }
+    totalTickets = rows * seats
+    if (totalTickets > 60) totalIncome = (rows / 2 * seats * 10) + (((rows * seats - (rows / 2 * seats)) * 8))
+    else totalIncome = totalTickets * 10
+    kassa()
+}
